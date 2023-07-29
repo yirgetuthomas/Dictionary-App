@@ -2,6 +2,7 @@ import React, { useId, useState } from 'react'
 
 function Search() {
  const [SearchWord, setSearchWord]   = useState("");
+ const [SearchResult, setSearchResult]   = useState([]);
  const id = useId();
  const searchid = `${id}-search`
  
@@ -11,7 +12,12 @@ function Search() {
     const url = `${ENDPOINT}${SearchWord}`;
     const response = await fetch(url)
     const json = await response.json()
+    setSearchResult(SearchResult.push(...json[0].meanings))
     console.log(json[0].meanings[0].definitions[0].definition)
+    console.log(json)
+    console.log(SearchResult)
+    console.log(Array.isArray(SearchResult))
+    
     return json
    }
  
@@ -29,8 +35,10 @@ function Search() {
       </form>
       <div>
         {SearchWord}
-        
-        
+        {SearchResult?.map((result) => {
+            return <li>{result.partOfSpeech}</li>;
+        }
+        )}
       </div>
     </div>
   )
